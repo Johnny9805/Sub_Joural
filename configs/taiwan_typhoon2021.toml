@@ -1,0 +1,68 @@
+# Study configuration: CorrDiff-Taiwan domain, 2021 typhoon season.
+#
+# 2021 is chosen because CorrDiff-Taiwan was trained on 2018-2020 and
+# evaluated on 2021 (to re-check against the paper in week 1), so the season
+# is out-of-sample. Candidate storms near Taiwan in 2021 include In-fa (Jul),
+# Lupit (Aug), Chanthu (Sep) and Kompasu (Oct); scripts/data/download_ibtracs.py
+# builds the actual list from IBTrACS.
+
+[domain]
+name = "corrdiff_taiwan"
+# Approximate extent of the CWA 2 km inner domain (Lambert conformal, 448 x 448),
+# from the NGC "modulus_datasets_cwa" description. Replace with the exact
+# lat/lon arrays from the dataset once downloaded.
+lat_min = 19.5
+lat_max = 27.9
+lon_min = 116.3
+lon_max = 125.6
+# Margin added for ERA5 downloads and storm selection [deg]
+margin = 1.0
+
+[period]
+start = "2021-07-01"
+end = "2021-10-31"
+# ERA5 times (UTC hours); CorrDiff-Taiwan runs hourly
+hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+
+[era5]
+# Input grid of the released checkpoint (earth2studio CorrDiffTaiwan.input_coords):
+# lat 19.25..28.0 (36 pts), lon 116.0..125.75 (40 pts), 0.25 deg. CDS order N, W, S, E.
+area = [28.0, 116.0, 19.25, 125.75]
+# Released checkpoint (NGC corrdiff_inference_package v1) uses 12 inputs:
+#   tcwv, z/t/u/v at 500 and 850 hPa, t2m, u10m, v10m.
+# The CWA training dataset describes 20 inputs (also 700 and 925 hPa); both are
+# downloaded so either configuration can be fed. total_precipitation is a reference.
+single_levels = [
+    "2m_temperature",
+    "10m_u_component_of_wind",
+    "10m_v_component_of_wind",
+    "total_column_water_vapour",
+    "total_precipitation",
+]
+pressure_levels = ["temperature", "u_component_of_wind", "v_component_of_wind", "geopotential"]
+levels_hpa = [500, 700, 850, 925]
+
+[stations]
+# GHCNh (hourly, successor of ISD); variables kept when subsetting
+ghcnh_columns = [
+    "temperature",
+    "dew_point_temperature",
+    "wind_speed",
+    "wind_direction",
+    "wind_gust",
+    "precipitation",
+    "sea_level_pressure",
+]
+# Restrict station search to land points inside this box (Taiwan + nearby islands)
+lat_min = 21.8
+lat_max = 25.4
+lon_min = 119.9
+lon_max = 122.1
+
+[ibtracs]
+basin = "WP"
+# keep storms whose track enters domain + margin during the period with at
+# least this intensity inside the box
+min_wind_kt = 34
+# "USA" (JTWC, 1-min winds) or "TOKYO" (RSMC Tokyo, 10-min winds)
+wind_agency = "USA"

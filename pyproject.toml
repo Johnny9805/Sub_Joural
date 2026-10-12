@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dsaudit"
+version = "0.1.0"
+description = "Provenance and calibration audit of generative weather downscaling (Project 1)"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+]
+
+[project.optional-dependencies]
+# Reading ERA5 / CorrDiff output, plotting, data download
+data = [
+    "xarray>=2023.1",
+    "netCDF4>=1.6",
+    "pandas>=2.0",
+    "matplotlib>=3.7",
+    "cdsapi>=0.7.2",
+]
+# CorrDiff inference and autodiff Jacobians (GPU workstation only)
+model = [
+    "torch>=2.2",
+    "earth2studio",
+]
+dev = ["pytest>=7"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

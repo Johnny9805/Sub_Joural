@@ -1,0 +1,21 @@
+# Conda environment for the GPU workstation (CorrDiff inference + analysis).
+# The analysis core (src/dsaudit) needs only numpy/scipy and runs on CPU.
+#   conda env create -f environment.yml && conda activate dsaudit
+#   pip install -e ".[data,model,dev]"
+name: dsaudit
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - scipy
+  - xarray
+  - netcdf4
+  - zarr
+  - pandas
+  - matplotlib
+  - cartopy
+  - pytest
+  - pip
+  - pip:
+      - cdsapi>=0.7.2

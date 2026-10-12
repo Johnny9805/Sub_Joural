@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+
+# Large data and run outputs: keep out of git
+data/*
+!data/README.md
+outputs/*
+!outputs/.gitkeep
+checkpoints/
+*.nc
+*.zarr/
+*.mdlus
+*.psv
+*.parquet
+
+# Credentials
+.cdsapirc
+.netrc
